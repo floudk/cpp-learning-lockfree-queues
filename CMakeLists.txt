@@ -10,3 +10,14 @@ add_executable(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PRIVATE
   ${PROJECT_SOURCE_DIR}/include
 )
+
+# ----------- unit test -----------
+add_executable(ringbuffer_test
+    test/lock_vyukov_test.cpp
+)
+target_include_directories(ringbuffer_test PRIVATE
+    ${PROJECT_SOURCE_DIR}/include
+)
+target_link_libraries(ringbuffer_test PRIVATE pthread)
+enable_testing()
+add_test(NAME RingBufferTest COMMAND ringbuffer_test)
