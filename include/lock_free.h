@@ -1,19 +1,25 @@
 #pragma once
 #include<common.h>
 
+using Capacity_t = std::size_t;
 template<typename T, typename Impl>
 class LockFreeQueue {
 public:
     template<typename R>
-    void enqueue(R&& item){
-        static_cast<Impl*>(this)->enqueue(std::forward<R>(item));
+    bool enqueue(R&& item){
+       return static_cast<Impl*>(this)->enqueue(std::forward<R>(item));
     }
     bool dequeue(T& item){
         return static_cast<Impl*>(this)->dequeue(item);
     }
 };
 
-using Capacity_t = std::size_t;
+#include "spmc_vyukov.tpp"
+#include "spsc_kfifo.tpp"
+#include "mpsc_linked_queue.tpp"
+
+#include "mpmc_vyukov.tpp"
+
 template<typename T, Capacity_t Capacity>
 class LockFreeRingBufferVyukov : public LockFreeQueue<T, LockFreeRingBufferVyukov<T, Capacity>>{
 private:
